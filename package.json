@@ -1,5 +1,5 @@
 {
-  "name": "mini-vapor-framework",
+  "name": "fe",
   "version": "0.1.0",
   "description": "Minimalistic class-based fine-grained reactive frontend framework",
   "main": "dist/index.js",
@@ -24,7 +24,7 @@
     "fine-grained",
     "vapor"
   ],
-  "author": "Илья Сербин",
+  "author": "Illia Serbin",
   "license": "MIT",
   "dependencies": {
     "alien-signals": "^2.0.5"
