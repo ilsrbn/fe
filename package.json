@@ -2,18 +2,17 @@
 	"name": "fe",
 	"version": "0.1.1",
 	"description": "Minimalistic class-based fine-grained reactive frontend framework",
-	"main": "dist/index.js",
+	"main": "dist/fe.mjs",
+	"module": "dist/fe.mjs",
 	"types": "dist/index.d.ts",
-	"module": "dist/index.js",
 	"exports": {
 		".": {
-			"import": "./dist/index.js",
-			"require": "./dist/index.js",
+			"import": "./dist/fe.mjs",
 			"types": "./dist/index.d.ts"
 		}
 	},
 	"scripts": {
-		"build": "tsc --noEmitOnError false",
+		"build": "vite build",
 		"dev": "vite"
 	},
 	"keywords": [
@@ -33,6 +32,7 @@
 		"@biomejs/biome": "2.1.2",
 		"lefthook": "^1.12.2",
 		"typescript": "^5.8.3",
-		"vite": "^7.0.5"
+		"vite": "^7.0.5",
+		"vite-plugin-dts": "^4.5.4"
 	}
 }
