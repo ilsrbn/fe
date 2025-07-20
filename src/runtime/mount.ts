@@ -1,7 +1,11 @@
-import {compileTemplate} from '../core/compiler'
+import { compileTemplate } from "../core/compiler";
+import type { ComponentClass, ComponentInstance } from "../types";
 
-export async function mount(ComponentClass: new () => any, mountPoint: HTMLElement) {
-  const instance = new ComponentClass()
-  const fragment = compileTemplate(instance.template, instance)
-  mountPoint.appendChild(fragment)
+export function mount<T extends ComponentInstance>(
+	ComponentClass: ComponentClass<T>,
+	mountPoint: HTMLElement,
+): void {
+	const instance = new ComponentClass();
+	const fragment = compileTemplate(instance.template, instance);
+	mountPoint.appendChild(fragment);
 }

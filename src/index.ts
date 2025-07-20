@@ -1,4 +1,4 @@
-export {signal, computed, effect} from './core/reactivity'
-export {mount} from './runtime/mount'
-export {compileTemplate} from './core/compiler'
-export type {Reactive, R_Reactive, Effect} from './types'
+export { compileTemplate } from "./core/compiler";
+export { computed, effect, signal } from "./core/reactivity";
+export { mount } from "./runtime/mount";
+export type { Effect, R_Reactive, Reactive } from "./types";

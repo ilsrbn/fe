@@ -1,1 +1,1 @@
-export {signal, computed, effect} from 'alien-signals'
+export { computed, effect, signal } from "alien-signals";
