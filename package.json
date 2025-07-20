@@ -1,6 +1,6 @@
 {
 	"name": "fe",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "Minimalistic class-based fine-grained reactive frontend framework",
 	"main": "dist/fe.mjs",
 	"module": "dist/fe.mjs",
