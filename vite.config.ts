@@ -1,15 +1,28 @@
+// ===== vite.config.ts =====
+
+import { resolve } from "path";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
+import vaporPluginSwc from "./src/plugin";
 
 export default defineConfig({
+	plugins: [vaporPluginSwc(), dts({ insertTypesEntry: true })],
+	optimizeDeps: {
+		exclude: ["@swc/core"],
+	},
 	build: {
-		outDir: "dist",
 		lib: {
-			entry: "./src/index.ts",
-			name: "fe",
-			fileName: "fe",
-			formats: ["es"], // можно добавить 'cjs' при необходимости
+			entry: {
+				index: resolve(__dirname, "src/index.ts"),
+				plugin: resolve(__dirname, "src/plugin.ts"),
+			},
+			formats: ["es", "cjs"],
+			fileName: (format, name) =>
+				format === "es" ? `${name}.es.js` : `${name}.cjs`,
+		},
+		rollupOptions: {
+			external: ["@swc/core", "alien-signals"],
 		},
 	},
-	plugins: [dts()],
+	assetsInclude: ["**/*.node"],
 });
