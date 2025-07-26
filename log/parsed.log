@@ -1,0 +1,49 @@
+<ref *1> Document {
+  startIndex: null,
+  endIndex: null,
+  children: [
+    <ref *2> Text {
+      startIndex: null,
+      endIndex: null,
+      data: '\n  ',
+      type: 'text'
+    },
+    <ref *3> Element {
+      startIndex: null,
+      endIndex: null,
+      children: [
+        Text {
+          startIndex: null,
+          endIndex: null,
+          data: '{{ a + b }}',
+          type: 'text'
+        }
+      ],
+      name: 'div',
+      attribs: { '@click': 'onClick' },
+      type: 'tag'
+    },
+    <ref *4> Element {
+      startIndex: null,
+      endIndex: null,
+      children: [
+        Text {
+          startIndex: null,
+          endIndex: null,
+          data: '{{\n  a + b }}',
+          type: 'text'
+        }
+      ],
+      name: 'p',
+      attribs: { ':isodd': 'isOdd' },
+      type: 'tag'
+    },
+    <ref *5> Text {
+      startIndex: null,
+      endIndex: null,
+      data: '\n  ',
+      type: 'text'
+    }
+  ],
+  type: 'root'
+}
