@@ -13,7 +13,7 @@ export async function transformComponent(code: string) {
 	const result = await generateScriptAst(code);
 	const v = result.unwrapOr(null);
 	if (!v) return undefined;
-	const statements = await generateRenderFunction(v.template, { log: false });
+	const statements = await generateRenderFunction(v, { log: false });
 
 	const renderMethod: ClassMethod = {
 		type: "ClassMethod",
