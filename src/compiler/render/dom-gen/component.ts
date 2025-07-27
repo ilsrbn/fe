@@ -16,9 +16,10 @@ export const generateComponentMount = (
 	const span = { start: 0, end: 0, ctxt: 0 };
 	const varName = `cmp_${tagName}_${Math.random().toString(36).slice(2, 8)}`;
 	const statements: Statement[] = [];
-	const templateAttributes = tag.attributes.filter((attr) =>
-		attr.name.startsWith("$"),
-	);
+	const templateAttributes = tag.attributes
+		.filter((attr) => attr.name.startsWith("$"))
+		.map((attr) => ({ value: attr.value, name: attr.name.replace("$", "") }));
+
 	const handlers = templateAttributes.map((attr) => {
 		let handler: string | undefined;
 		if (
@@ -27,7 +28,7 @@ export const generateComponentMount = (
 					attrib.key.type === "Identifier" && attrib.key.value === attr.value,
 			)
 		) {
-			handler = `this.${attr.value}`;
+			handler = `${attr.value}`;
 		} else if (
 			AST.computed.some(
 				(comp) =>
@@ -37,9 +38,9 @@ export const generateComponentMount = (
 				(sig) => sig.key.type === "Identifier" && sig.key.value === attr.value,
 			)
 		) {
-			handler = `_readonlySignal(this.${attr.value})`;
-		} else handler = attr.value;
-		return `${attr.value}: ${handler}`;
+			handler = `_readonlySignal(${attr.value})`;
+		} else handler = `${attr.value}`;
+		return `${attr.name}: ${handler}`;
 	});
 
 	const handlersString = !handlers.length

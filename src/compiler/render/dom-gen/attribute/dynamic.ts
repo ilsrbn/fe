@@ -8,7 +8,7 @@ export const generateDynamicAttributeStatement = (
 	value: string,
 	elVarName: string,
 ): ExpressionStatement => {
-	const parsedValue = parseExpression(value);
+	const parsedValue = parseExpression(value, false);
 	return {
 		type: "ExpressionStatement",
 		span,

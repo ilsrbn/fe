@@ -10,7 +10,7 @@ export const generateEventListenerStatement = (
 ): ExpressionStatement => {
 	const eventName = attr.slice(1); // @click → click
 
-	const expr = flattenNestedCallExpression(parseExpression(value));
+	const expr = parseExpression(value, false);
 
 	if ("arguments" in expr) {
 		expr.arguments = [
@@ -18,7 +18,7 @@ export const generateEventListenerStatement = (
 				expression: {
 					optional: false,
 					type: "Identifier",
-					value: "event",
+					value: "$event",
 					span,
 				},
 			},
@@ -64,7 +64,7 @@ export const generateEventListenerStatement = (
 						params: [
 							{
 								type: "Identifier",
-								value: "event",
+								value: "$event",
 								span,
 								optional: false,
 							},

@@ -96,7 +96,7 @@ export async function generateTextInterpolation(
 	};
 
 	// Парсим выражение как Program → Expression
-	const parsed = parseExpression(expressionSource);
+	const parsed = parseExpression(expressionSource, false);
 
 	const effectExpr: ExpressionStatement = {
 		type: "ExpressionStatement",
