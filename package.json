@@ -1,6 +1,6 @@
 {
 	"name": "fe",
-	"version": "0.1.1",
+	"version": "0.2.0",
 	"main": "./dist/runtime/fe.cjs.js",
 	"module": "./dist/runtime/fe.es.js",
 	"types": "./dist/runtime/index.d.ts",
