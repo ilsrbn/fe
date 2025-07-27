@@ -1,17 +1,25 @@
 import type { Statement } from "@swc/core";
 import { type ChildNode, isTag, isText } from "domhandler";
+import { AST } from "../ast";
 import { isPascalComponent } from "../helper/isPascalComponent";
 import { generateComponentMount } from "./dom-gen/component";
 import { generateElementCreate, generateParentPush } from "./dom-gen/element";
 import { generateTextInterpolation } from "./dom-gen/interpolation";
 import { generateStaticTextNode } from "./dom-gen/interpolation/staticText";
+import type { Walk_Options } from "./types";
 
-export const walk = async (children: ChildNode[], parentVar?: string) => {
+export const walk = async (
+	children: ChildNode[],
+	{ parentVar, AST }: Walk_Options,
+) => {
 	const result: { varName: string; stmts: Statement[] }[] = [];
 
 	for (const child of children) {
 		if (isTag(child) && isPascalComponent(child.name)) {
-			const { stmts, varName } = generateComponentMount(child.name, parentVar);
+			const { stmts, varName } = generateComponentMount(child, {
+				parentVar,
+				AST,
+			});
 			result.push({ varName: !parentVar ? varName : "", stmts });
 			continue;
 		}
@@ -20,7 +28,7 @@ export const walk = async (children: ChildNode[], parentVar?: string) => {
 			result.push({ varName: !parentVar ? el.varName : "", stmts: el.stmts });
 
 			// Рекурсивно вызываем walk для потомков
-			const nested = await walk(child.children, el.varName);
+			const nested = await walk(child.children, { AST, parentVar: el.varName });
 			result.push(...nested);
 			if (parentVar) {
 				result.push({

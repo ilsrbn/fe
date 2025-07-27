@@ -12,6 +12,7 @@ import {
 } from "@swc/core";
 import { errAsync, ok, type Result } from "neverthrow";
 import { isComponents } from "./helper/isComponents";
+import { isComputed } from "./helper/isComputed";
 import { isMethod } from "./helper/isMethod";
 import { isSignal } from "./helper/isSignal";
 import { isTemplate } from "./helper/isTemplate";
@@ -24,6 +25,7 @@ const options: ParseOptions = {
 export type AST = {
 	name: string;
 	signals: ClassProperty[];
+	computed: ClassProperty[];
 	methods: ClassMethod[];
 	ast: Module;
 	declaration: ClassExpression;
@@ -52,6 +54,7 @@ export const generateScriptAst = async (
 	let templateProperty: ClassProperty | undefined;
 	let template: string | undefined;
 	const signals: ClassProperty[] = [];
+	const computed: ClassProperty[] = [];
 	const methods: ClassMethod[] = [];
 	let components: ClassProperty | undefined;
 
@@ -74,6 +77,10 @@ export const generateScriptAst = async (
 			signals.push(C_Member as ClassProperty);
 			continue;
 		}
+		if (isComputed(C_Member)) {
+			computed.push(C_Member as ClassProperty);
+			continue;
+		}
 		if (isMethod(C_Member)) {
 			methods.push(C_Member as ClassMethod);
 		}
@@ -85,6 +92,7 @@ export const generateScriptAst = async (
 	return ok({
 		name,
 		signals,
+		computed,
 		methods,
 		ast,
 		declaration,

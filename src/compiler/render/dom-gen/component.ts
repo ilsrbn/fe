@@ -1,4 +1,6 @@
 import type { Expression, Statement } from "@swc/core";
+import type { Element } from "domhandler";
+import type { Walk_Options } from "../types";
 import { parseExpression, parseStatements } from "./expression";
 
 type ComponentMount = {
@@ -7,65 +9,57 @@ type ComponentMount = {
 };
 
 export const generateComponentMount = (
-	tagName: string,
-	parentVar?: string,
+	tag: Element,
+	{ parentVar, AST }: Walk_Options,
 ): ComponentMount => {
+	const { name: tagName } = tag;
 	const span = { start: 0, end: 0, ctxt: 0 };
-	const varName = `cmp_${Math.random().toString(36).slice(2, 8)}`;
+	const varName = `cmp_${tagName}_${Math.random().toString(36).slice(2, 8)}`;
 	const statements: Statement[] = [];
+	const templateAttributes = tag.attributes.filter((attr) =>
+		attr.name.startsWith("$"),
+	);
+	const handlers = templateAttributes.map((attr) => {
+		let handler: string | undefined;
+		if (
+			AST.methods.some(
+				(attrib) =>
+					attrib.key.type === "Identifier" && attrib.key.value === attr.value,
+			)
+		) {
+			handler = `this.${attr.value}`;
+		} else if (
+			AST.computed.some(
+				(comp) =>
+					comp.key.type === "Identifier" && comp.key.value === attr.value,
+			) ||
+			AST.signals.some(
+				(sig) => sig.key.type === "Identifier" && sig.key.value === attr.value,
+			)
+		) {
+			handler = `_readonlySignal(this.${attr.value})`;
+		} else handler = attr.value;
+		return `${attr.value}: ${handler}`;
+	});
 
-	const isAsync = true; // можно попытаться определить в рантайме?
-
-	if (isAsync) {
-		const expr = parseStatements(
-			`const import_${varName} = await this.components["${tagName}"]();
-           const ${varName} = await new import_${varName}.default().__render();`,
-		);
-		// Пример для async-компонента
-		statements.push(...expr);
-		parentVar &&
-			statements.push({
-				type: "ExpressionStatement",
-				span,
-				expression: parseExpression(
-					`${parentVar}.appendChild(${varName})`,
-					false,
-				) as Expression,
-			});
-	} else {
-		// Для sync варианта:
+	const handlersString = !handlers.length
+		? ""
+		: "{" + handlers.join(", ") + "}";
+	const expr = parseStatements(
+		`const import_${varName} = await this.components["${tagName}"]();
+         const ${varName} = await new import_${varName}.default(${handlersString}).__render();`,
+	);
+	// Пример для async-компонента
+	statements.push(...expr);
+	parentVar &&
 		statements.push({
-			type: "VariableDeclaration",
-			kind: "const",
+			type: "ExpressionStatement",
 			span,
-			declare: false,
-			declarations: [
-				{
-					type: "VariableDeclarator",
-					span,
-					id: {
-						type: "Identifier",
-						value: varName,
-						span,
-						optional: false,
-					},
-					definite: false,
-					init: parseExpression(
-						`this.components["${tagName}"].__render()`,
-						false,
-					),
-				},
-			],
+			expression: parseExpression(
+				`${parentVar}.appendChild(${varName})`,
+				false,
+			) as Expression,
 		});
-		parentVar &&
-			statements.push({
-				type: "ExpressionStatement",
-				span,
-				expression: parseExpression(
-					`${parentVar}.appendChild(${varName})`,
-					false,
-				),
-			});
-	}
+
 	return { varName, stmts: statements };
 };

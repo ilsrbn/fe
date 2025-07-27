@@ -18,7 +18,7 @@ export const generateDynamicAttributeStatement = (
 			callee: {
 				optional: false,
 				type: "Identifier",
-				value: "effect",
+				value: "_effect",
 				span,
 			},
 			arguments: [
