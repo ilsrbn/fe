@@ -12,7 +12,18 @@ export const generateEventListenerStatement = (
 
 	const expr = flattenNestedCallExpression(parseExpression(value));
 
-	console.dir(expr, { depth: null });
+	if ("arguments" in expr) {
+		expr.arguments = [
+			{
+				expression: {
+					optional: false,
+					type: "Identifier",
+					value: "event",
+					span,
+				},
+			},
+		];
+	}
 
 	return {
 		type: "ExpressionStatement",
@@ -50,7 +61,14 @@ export const generateEventListenerStatement = (
 						span,
 						async: false,
 						generator: false,
-						params: [],
+						params: [
+							{
+								type: "Identifier",
+								value: "event",
+								span,
+								optional: false,
+							},
+						],
 						body: {
 							type: "BlockStatement",
 							span,
@@ -68,6 +86,7 @@ export const generateEventListenerStatement = (
 		},
 	};
 };
+
 function flattenNestedCallExpression(expr: Expression): Expression {
 	if (
 		expr.type === "CallExpression" &&
@@ -76,6 +95,7 @@ function flattenNestedCallExpression(expr: Expression): Expression {
 	) {
 		return {
 			...expr,
+
 			callee: expr.callee.callee,
 		};
 	}

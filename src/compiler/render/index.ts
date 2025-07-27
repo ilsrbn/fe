@@ -11,7 +11,9 @@ export const generateRenderFunction = async (
 		log: boolean;
 	},
 ) => {
-	const parsed = htmlparser2.parseDocument(template);
+	const parsed = htmlparser2.parseDocument(template, {
+		lowerCaseTags: false,
+	});
 	if (options.log)
 		await writeFile(
 			"./log/parsed.json",

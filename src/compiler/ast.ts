@@ -11,6 +11,7 @@ import {
 	type TemplateLiteral,
 } from "@swc/core";
 import { errAsync, ok, type Result } from "neverthrow";
+import { isComponents } from "./helper/isComponents";
 import { isMethod } from "./helper/isMethod";
 import { isSignal } from "./helper/isSignal";
 import { isTemplate } from "./helper/isTemplate";
@@ -52,8 +53,13 @@ export const generateScriptAst = async (
 	let template: string | undefined;
 	const signals: ClassProperty[] = [];
 	const methods: ClassMethod[] = [];
+	let components: ClassProperty | undefined;
 
 	for (const C_Member of declaration.body) {
+		if (isComponents(C_Member)) {
+			components = C_Member as ClassProperty;
+			continue;
+		}
 		if (isTemplate(C_Member)) {
 			templateProperty = C_Member as ClassProperty;
 			template = (templateProperty.value as StringLiteral).value;
@@ -84,5 +90,6 @@ export const generateScriptAst = async (
 		declaration,
 		templateProperty,
 		template,
+		components,
 	});
 };
