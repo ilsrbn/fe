@@ -1,38 +1,44 @@
 {
 	"name": "fe",
-	"version": "0.1.2",
-	"description": "Minimalistic class-based fine-grained reactive frontend framework",
-	"main": "dist/fe.mjs",
-	"module": "dist/fe.mjs",
-	"types": "dist/index.d.ts",
+	"version": "0.1.1",
+	"main": "./dist/runtime/fe.cjs.js",
+	"module": "./dist/runtime/fe.es.js",
+	"types": "./dist/runtime/index.d.ts",
 	"exports": {
 		".": {
-			"import": "./dist/fe.mjs",
-			"types": "./dist/index.d.ts"
+			"import": "./dist/runtime/index.mjs",
+			"require": "./dist/runtime/index.mjs",
+			"types": "./dist/runtime/index.d.ts"
+		},
+		"./plugin": {
+			"import": "./dist/plugin/vte.mjs",
+			"types": "./dist/plugin/vte.d.ts"
+		},
+		"./compiler": {
+			"import": "./dist/compiler/ast.mjs",
+			"types": "./dist/compiler/ast.d.ts"
 		}
 	},
 	"scripts": {
-		"build": "vite build",
+		"build": "tsup",
 		"dev": "vite"
 	},
-	"keywords": [
-		"reactivity",
-		"signals",
-		"framework",
-		"typescript",
-		"fine-grained",
-		"vapor"
-	],
-	"author": "Illia Serbin",
-	"license": "MIT",
 	"dependencies": {
 		"alien-signals": "^2.0.5"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.1.2",
+		"@swc/core": "^1.6.0",
+		"@types/node": "^24.0.15",
+		"domhandler": "^5.0.3",
+		"flatted": "^3.3.3",
+		"htmlparser2": "^10.0.0",
 		"lefthook": "^1.12.2",
+		"neverthrow": "^8.2.0",
+		"tsx": "^4.20.3",
 		"typescript": "^5.8.3",
 		"vite": "^7.0.5",
-		"vite-plugin-dts": "^4.5.4"
+		"vite-plugin-dts": "^4.5.4",
+		"zod": "^4.0.10"
 	}
 }
