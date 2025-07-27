@@ -6,16 +6,16 @@
 	"types": "./dist/runtime/index.d.ts",
 	"exports": {
 		".": {
-			"import": "./dist/runtime/index.js",
-			"require": "./dist/runtime/index.js",
+			"import": "./dist/runtime/index.mjs",
+			"require": "./dist/runtime/index.mjs",
 			"types": "./dist/runtime/index.d.ts"
 		},
 		"./plugin": {
-			"import": "./dist/plugin/vte.js",
+			"import": "./dist/plugin/vte.mjs",
 			"types": "./dist/plugin/vte.d.ts"
 		},
 		"./compiler": {
-			"import": "./dist/compiler/ast.js",
+			"import": "./dist/compiler/ast.mjs",
 			"types": "./dist/compiler/ast.d.ts"
 		}
 	},
